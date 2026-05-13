@@ -1,0 +1,74 @@
+#  =========================================================================
+#  Make.tricolor — HPL Makefile Configuration
+#
+#  Tricolor HPC Cluster · CPSC-375 · Trinity College Hartford · April 2026
+#  Author: Liu Neptali Restrepo Sanabria
+#
+#  Target platform: Ubuntu Server 22.04 LTS · Intel Core i7-10700
+#  BLAS: OpenBLAS 0.3.26 (pthread build)
+#  MPI:  OpenMPI 4.1.6
+#
+#  Usage:
+#    Copy this file to the HPL source root:
+#      cp Make.tricolor /home/liu/cluster/hpl-2.3/Make.tricolor
+#    Then build:
+#      cd /home/liu/cluster/hpl-2.3
+#      make arch=tricolor
+#
+#  NOTE: Before building, patch makes/Make.auxil line ~93.
+#  See README.md Section 6.3 for the required fix.
+#  =========================================================================
+
+SHELL        = /bin/sh
+
+# ── Architecture identifier ────────────────────────────────────────────────
+ARCH         = tricolor
+
+# ── HPL directory structure ────────────────────────────────────────────────
+TOPdir       = /home/liu/cluster/hpl-2.3
+INCdir       = $(TOPdir)/include
+BINdir       = $(TOPdir)/bin/$(ARCH)
+LIBdir       = $(TOPdir)/lib/$(ARCH)
+HPLlib       = $(LIBdir)/libhpl.a
+
+# ── MPI (OpenMPI 4.1.6) ───────────────────────────────────────────────────
+MPdir        = /usr/lib/x86_64-linux-gnu/openmpi
+MPinc        = -I$(MPdir)/include
+MPlib        = $(MPdir)/lib/libmpi.so
+
+# ── BLAS (OpenBLAS 0.3.26 pthread build) ──────────────────────────────────
+LAdir        = /usr/lib/x86_64-linux-gnu/openblas-pthread
+LAinc        =
+LAlib        = $(LAdir)/libopenblas.a
+
+# ── Compilers ──────────────────────────────────────────────────────────────
+CC           = mpicc
+CCNOOPT      = $(CC)
+LINKER       = mpicc
+
+# ── Compiler flags ─────────────────────────────────────────────────────────
+#   -O3              : aggressive optimisation
+#   -fomit-frame-pointer : free up a register for computation
+#   -funroll-loops   : loop unrolling for numerical kernels
+#   -W -Wall         : enable warnings (informational only)
+CCFLAGS      = $(HPL_DEFS) -fomit-frame-pointer -O3 -funroll-loops -W -Wall
+LINKFLAGS    = $(CCFLAGS)
+
+# ── HPL Fortran-to-C interface ─────────────────────────────────────────────
+#   Add__          : appends underscore to Fortran symbol names (standard)
+#   F77_INTEGER=int: maps Fortran INTEGER to C int
+#   StringSunStyle : Sun-style Fortran string passing convention
+F2CDEFS      = -DAdd__ -DF77_INTEGER=int -DStringSunStyle
+
+# ── HPL defines (assembled) ───────────────────────────────────────────────
+HPL_INCLUDES = -I$(INCdir) -I$(INCdir)/$(ARCH) $(MPinc) $(LAinc)
+HPL_LIBS     = $(HPLlib) $(LAlib) $(MPlib)
+HPL_DEFS     = $(F2CDEFS) $(HPL_OPTS) $(HPL_INCLUDES)
+
+# ── Archive tool ──────────────────────────────────────────────────────────
+ARCHIVER     = ar
+ARFLAGS      = r
+RANLIB       = echo
+
+# ── Make ──────────────────────────────────────────────────────────────────
+MAKE         = make
