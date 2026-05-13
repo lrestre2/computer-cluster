@@ -1,6 +1,6 @@
 # Tricolor — Distributed HPC Cluster
 **CPSC-375 High-Performance Computing. Trinity College Hartford. April 2026**  
-**Author:** 
+**Author:** `
 Liu Neptali Restrepo Sanabria 
 `liu.restreposanabria@trincoll.edu`
 
@@ -26,15 +26,17 @@ OpenMPI build on the nodes.
 
 ```
 tricolor_source/
-├── README.md               # This file: full setup and run guide
-├── /src/
-    ├──hello_mpi.c          # MPI verification programme
-    ├──/hpl/
-      ├──HPL_phase1.dat     # HPL input file for Phase 1 (strong scaling)
-      ├──HPL_phase2a.dat    # HPL input file for Phase 2, run 1 (NB=256, N=52000)
-      ├──HPL_phase2b.dat    # HPL input file for Phase 2, run 2 (NB sweep, N=60000)
-      ├──Make.tricolor      # HPL Makefile configuration for this cluster
-      ├── run_benchmark.sh  # HPL benchmarking script (all phases)
+├── README.md                   # This file: full setup and run guide
+├── tricolor_presentation.pdf   # Presentation slides for project
+├── tricolor_report.pdf         # Cluster project full report and analysis
+├── src/
+    ├──hello_mpi.c              # MPI verification programme
+    ├──hpl/
+      ├──HPL_phase1.dat         # HPL input file for Phase 1 (strong scaling)
+      ├──HPL_phase2a.dat        # HPL input file for Phase 2, run 1 (NB=256, N=52000)
+      ├──HPL_phase2b.dat        # HPL input file for Phase 2, run 2 (NB sweep, N=60000)
+      ├──Make.tricolor          # HPL Makefile configuration for this cluster
+      ├── run_benchmark.sh      # HPL benchmarking script (all phases)
 ```
 
 ---
